@@ -8,13 +8,19 @@ IConfiguration configuration = new ConfigurationBuilder()
     .Build();
 string endpoint = configuration["DocIntelligenceEndpoint"];
 string apiKey = configuration["DocIntelligenceKey"];
+
+
+// Create credentials and client for Document Analysis
 AzureKeyCredential credential = new AzureKeyCredential(apiKey);
 DocumentAnalysisClient client = new DocumentAnalysisClient(new Uri(endpoint), credential);
 
+
+// Retrieve model ID from configuration and set the file URI to analyze
 string modelId =  configuration["ModelId"];
 Uri fileUri = new Uri("https://github.com/MicrosoftLearning/mslearn-ai-document-intelligence/blob/main/Labfiles/02-custom-document-intelligence/test1.jpg?raw=true");
 Console.WriteLine($"Analyzing document from Uri: {fileUri.AbsoluteUri}");
 
+// Analyze the document from the given URI using the specified model
 AnalyzeDocumentOperation operation = await client.AnalyzeDocumentFromUriAsync(WaitUntil.Completed, modelId, fileUri);
 AnalyzeResult result = operation.Value;
 
