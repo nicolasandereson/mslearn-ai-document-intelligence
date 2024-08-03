@@ -5,7 +5,7 @@ NORMAL=$(tput sgr0)
 GREEN=$(tput setaf 2)
 
 # Set up the resource group
-resourceGroupName=FormsRecognizerResources
+resourceGroupName=formsrecognizerresources
 printf "${GREEN}Setting up the $resourceGroupName resource group. \n${NORMAL}"
 az group create --location westus --name $resourceGroupName
 
@@ -13,19 +13,19 @@ az group create --location westus --name $resourceGroupName
 printf "${GREEN}Setting up the Forms Recognizer resource. \n${NORMAL}"
 # First, purge it in case there's a recently deleted one
 SubID=$(az account show --query id --output tsv)
-az resource delete --ids "/subscriptions/${SubID}/providers/Microsoft.CognitiveServices/locations/westus/resourceGroups/${resourceGroupName}/deletedAccounts/FormsRecognizer"
-# Now, create the new one with a unique name
-az cognitiveservices account create --kind FormRecognizer --location westus --name FormsRecognizerUnique01 --resource-group $resourceGroupName --sku F0 --yes
+az resource delete --ids "/subscriptions/${SubID}/providers/Microsoft.CognitiveServices/locations/westus/resourceGroups/${resourceGroupName}/deletedAccounts/formsrecognizer"
+# Now, create the new one with a valid name
+az cognitiveservices account create --kind FormRecognizer --location westus --name formsrecognizer01 --resource-group $resourceGroupName --sku F0 --yes
 
 # Create the Cognitive Search resource
 printf "${GREEN}Setting up Azure Cognitive Search. \n${NORMAL}"
 # Purge any existing search resource with the same name
-az resource delete --ids "/subscriptions/${SubID}/resourceGroups/${resourceGroupName}/providers/Microsoft.Search/searchServices/enrichedcognitivesearch"
+az resource delete --ids "/subscriptions/${SubID}/resourceGroups/${resourceGroupName}/providers/Microsoft.Search/searchServices/enrichedsearch"
 
 # Adding a sleep to ensure the resource deletion is processed
 sleep 30
 
-# Now, create the new one with a unique name
-az search service create --name enrichedcognitivesearchUnique01 --location westus --resource-group $resourceGroupName --sku Free --partition-count 1 --replica-count 1
+# Now, create the new one with a valid name
+az search service create --name enrichedsearch01 --location westus --resource-group $resourceGroupName --sku Free --partition-count 1 --replica-count 1
 
 printf "${GREEN}Setup completed. \n${NORMAL}"
